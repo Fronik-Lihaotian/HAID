@@ -119,7 +119,7 @@ def map_svg_dataset(dataset_path, output_path, svg_dataset_path):
     :param svg_dataset_path: svg dataset path.
     """
     class_dirs = sorted([d for d in os.listdir(svg_dataset_path) if os.path.isdir(os.path.join(svg_dataset_path, d))])
-    for set_name in ['train', 'val']:
+    for set_name in ['train', 'val', 'test']:
         src_path = os.path.join(dataset_path, set_name)
         tar_path = os.path.join(output_path, set_name)
         for class_name in class_dirs:
@@ -171,13 +171,12 @@ def map_vtracer_dataset(dataset_path, output_path, svg_dataset_path):
         print(f'{set_name} set finished!')
     print('all finished!')
 
-# # Example usage
-# dataset_path = "E:/学习/去雾/data/dataset/miniImageNet"
-# output_path = "E:/学习/去雾/data/dataset/miniImageNet_raster_trainvaltest"
-# split_dataset_by_class(dataset_path, output_path)
 
 # svg MiniImageNet dataset split
-raster_dataset = '/bask/projects/j/jiaoj-multi-modal/miniImageNet_svg/miniImageNet_raster_trainvaltest'
-svg_dataset_path = "../miniImageNet_Vtracer"
-svg_output_path = "../miniImageNet_Vtracer_trainval"
+original_dataset_path = '../datasets/miniImageNet'
+raster_dataset = '../datasets/miniImageNet_raster_trainvaltest'
+svg_dataset_path = "../datasets/HAID-MiniImageNet"
+svg_output_path = "../datasets/HAID-MiniImageNet_trainval"
+# split the original raster dataset.
+# split_dataset_by_class(original_dataset_path, raster_dataset)
 map_vtracer_dataset(raster_dataset, svg_output_path, svg_dataset_path)

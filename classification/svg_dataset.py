@@ -23,7 +23,7 @@ class SvgDataset(Dataset):
         self.data = []
         if num_shapes not in [10, 20, 30, 50, 100, 500, 1000]:
             raise ValueError(
-                "The number of shapes is only valid at 10, 20, 30, 50, and 100, not " + str(num_shapes)
+                "The number of shapes is only valid at 10, 20, 30, 50, 100, 500, and 1000, not " + str(num_shapes)
             )
         if mode not in [0, 1, 2, 5, 7, 8]:
             raise ValueError("The mode number is only valid at 0, 1, 2, 5, 7 and 8, not " + str(mode))
@@ -68,6 +68,56 @@ class SvgDataset(Dataset):
 
         return label, image
 
+# For Vtracer
+class VtracerSvgDataset(Dataset):
+    def __init__(self, root_paths, transform=None, scaling=1.):
+        """
+        Args:
+            root_paths (str): path of SVG dataset。
+            num_shapes (int): the shapes number of svg files, default 100 (100 shapes)
+            mode (int): mode type of shapes, default 0 (all shapes)
+            transform (callable, optional): transform of images。
+            scaling (float): (0-1], any number not within this range will be changed to 1, default 1
+        """
+        # TODO scaling training [10%-100%]
+        self.scaling = scaling if 1. >= scaling > 1e-5 else 1.
+        self.root_paths = root_paths
+        self.transform = transform
+        self.data = []
+
+        for label, class_dir in enumerate(sorted(os.listdir(self.root_paths))):
+            class_path = os.path.join(self.root_paths, class_dir)
+            if not os.path.isdir(class_path):
+                continue
+            files = sorted(os.listdir(class_path))
+            random.shuffle(files)
+            # use different volume of input data to train
+            train_end = int(len(files)*self.scaling) if self.scaling < 1. else len(files)
+            for file_name in files[:train_end]:
+                if file_name.endswith('.svg'):
+                    file_path = os.path.join(class_path, file_name)
+                    self.data.append((label, file_path))
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        # read SVG files
+        label, svg_path = self.data[idx]
+        with open(svg_path, "r", encoding="utf-8") as f:
+            svg = f.read()
+
+        svg_data = Parser.parse(svg)
+
+        rast = Rasterizer()
+        buff = rast.rasterize(svg_data, svg_data.width, svg_data.height)
+        image = Image.frombytes('RGBA', (svg_data.width, svg_data.height), buff).convert('RGB')
+        # image.show()
+        # transform apply
+        if self.transform:
+            image = self.transform(image)
+
+        return label, image
 
 # # 数据预处理和增强
 # transform = transforms.Compose([

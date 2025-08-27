@@ -7,8 +7,6 @@ explained the details of how to do that (https://github.com/fogleman/primitive?t
 
 """
 
-
-
 import os
 import subprocess
 import json

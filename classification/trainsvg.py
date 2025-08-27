@@ -168,14 +168,14 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--batch_size', type=int, default=16)
+    parser.add_argument('--batch_size', type=int, default=64)
     parser.add_argument('--num_classes', type=int, default=100)
     parser.add_argument('--epochs', type=int, default=60)
     parser.add_argument('--img_size', type=int, default=224)
     parser.add_argument('--lr', type=float, default=0.0001)
 
     # dataset
-    parser.add_argument('--data_path', type=str, default='E:/学习/去雾/data/dataset')
+    parser.add_argument('--data_path', type=str, default='../dataset')
     parser.add_argument('--dataset', type=str, default='miniImageNet_svg')
     parser.add_argument('--data_scal_factor', type=float, default=0.3)
 

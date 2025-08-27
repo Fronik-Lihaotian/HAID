@@ -208,3 +208,9 @@ __marimo__/
 
 # datasets ignore
 datasets/
+
+# other ignore
+classification/wandb/
+classification/logfile/
+classification/models/
+classification/train2-Vtracer.py

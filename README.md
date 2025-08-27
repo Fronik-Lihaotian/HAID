@@ -1,5 +1,3 @@
-# Hierarchical Abstraction Image Dataset (HAID)
+# [BMVC 2025]An Exploratory Study on Abstract Images and Visual Representations Learned from Them
 
 This is the Github page for HAID, we are still decorating this project...
-
-
